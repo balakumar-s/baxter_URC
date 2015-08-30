@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(baxter_URC)
+project(baxter_cs5310)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -7,6 +7,7 @@ project(baxter_URC)
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   sensor_msgs
+  baxter_core_msgs
 )
 
 ## System dependencies are found with CMake's conventions
@@ -79,7 +80,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-#  INCLUDE_DIRS include
+  INCLUDE_DIRS include
 #  LIBRARIES baxter_URC
 #  CATKIN_DEPENDS roscpp sensor_msgs
 #  DEPENDS system_lib
@@ -103,7 +104,7 @@ include_directories(
 
 ## Declare a cpp executable
 # add_executable(baxter_URC_node src/baxter_URC_node.cpp)
-
+add_executable(joint_recorder src/joint_recorder.cpp)
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
 # add_dependencies(baxter_URC_node baxter_URC_generate_messages_cpp)
@@ -112,7 +113,7 @@ include_directories(
 # target_link_libraries(baxter_URC_node
 #   ${catkin_LIBRARIES}
 # )
-
+target_link_libraries(joint_recorder ${catkin_LIBRARIES})
 #############
 ## Install ##
 #############
