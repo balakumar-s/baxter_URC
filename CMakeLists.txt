@@ -8,6 +8,7 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   sensor_msgs
   baxter_core_msgs
+  
 )
 
 ## System dependencies are found with CMake's conventions
@@ -95,16 +96,17 @@ catkin_package(
 # include_directories(include)
 include_directories(
   ${catkin_INCLUDE_DIRS}
+  ${CURSES_INCLUDE_DIR}
 )
 
 ## Declare a cpp library
 # add_library(baxter_URC
 #   src/${PROJECT_NAME}/baxter_URC.cpp
 # )
-
+#add_library(curse_lib )
 ## Declare a cpp executable
 # add_executable(baxter_URC_node src/baxter_URC_node.cpp)
-add_executable(joint_recorder src/joint_recorder.cpp)
+add_executable(joint_recorder src/joint_recorder.cpp  /usr/include/curses.h)
 add_executable(joint_player src/joint_player.cpp)
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
@@ -114,8 +116,8 @@ add_executable(joint_player src/joint_player.cpp)
 # target_link_libraries(baxter_URC_node
 #   ${catkin_LIBRARIES}
 # )
-target_link_libraries(joint_recorder ${catkin_LIBRARIES})
-target_link_libraries(joint_player ${catkin_LIBRARIES})
+target_link_libraries(joint_recorder ${catkin_LIBRARIES} libcurses.so)
+target_link_libraries(joint_player ${catkin_LIBRARIES} )
 #############
 ## Install ##
 #############

@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <baxter_core_msgs/JointCommand.h>
+#include <ncurses.h> 
 std::ofstream record_file;
 int count_=0;
 int data_read=0;
@@ -31,7 +32,7 @@ void writeData(sensor_msgs::JointState state_in)
 	else if(limb_chosen==1)
 	{
 		start=9;
-		end=16;
+		end=15;
 	}
 	
 	//ROS_INFO("size:%d",siz_);
@@ -50,10 +51,11 @@ void writeData(sensor_msgs::JointState state_in)
 		record_file<<state_in.position[j]<<",";
 	}
 	record_file<<std::endl;
-	std::cout<<"position recorded"<<std::endl;
+	ROS_INFO("position recorded \n");//<<std::endl;
 }
 int main(int argc,char* argv[])
 {
+	nodelay(stdscr, TRUE);
 	std::string filename="temp.txt";
 	if(argc<4)
 	{
@@ -76,16 +78,21 @@ int main(int argc,char* argv[])
 	ros::NodeHandle n;
 	ros::Subscriber joint_sub=n.subscribe("/robot/joint_states",1,jointCallback);
 	record_file.open(filename.c_str());
-	char key_in='0';
+	std::cout<<"Type c to record position"<<std::endl;
+	initscr(); 
+
+	int key_in=0;
 	while(ros::ok())
 	{
-		if(data_read==1)
-		{
-			std::cout<<"Type c and press enter to record position"<<std::endl;
-		}
+	
 		if(data_read>0)
 		{
-			std::cin>>key_in;	
+			key_in=getch();
+			if(key_in==ERR)
+			{
+				key_in=0;
+			}
+
 		}
 		if(key_in=='c'&& data_read>0)
 		{	
@@ -94,10 +101,11 @@ int main(int argc,char* argv[])
 		if(key_in=='e')
 		{
 			record_file.close();
+			endwin();
 			exit(0);
 		}
 		ros::spinOnce();
 	}
-	
+	endwin();
 	return(0);
 }
