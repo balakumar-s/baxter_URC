@@ -115,7 +115,6 @@ add_executable(joint_player src/joint_player.cpp)
 #   ${catkin_LIBRARIES}
 # )
 target_link_libraries(joint_recorder ${catkin_LIBRARIES})
-target_link_libraries(joint_player ${catkin_LIBRARIES})
 #############
 ## Install ##
 #############
