@@ -51,7 +51,7 @@ void writeData(sensor_msgs::JointState state_in)
 		record_file<<state_in.position[j]<<",";
 	}
 	record_file<<std::endl;
-	ROS_INFO("position recorded \n");//<<std::endl;
+	//ROS_INFO("position recorded \n");//<<std::endl;
 }
 int main(int argc,char* argv[])
 {
