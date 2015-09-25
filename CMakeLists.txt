@@ -108,6 +108,7 @@ include_directories(
 # add_executable(baxter_URC_node src/baxter_URC_node.cpp)
 add_executable(joint_recorder src/joint_recorder.cpp  /usr/include/curses.h)
 add_executable(joint_player src/joint_player.cpp)
+add_executable(trajectory_player src/trajectory_player.cpp)
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
 # add_dependencies(baxter_URC_node baxter_URC_generate_messages_cpp)
@@ -118,6 +119,7 @@ add_executable(joint_player src/joint_player.cpp)
 # )
 target_link_libraries(joint_recorder ${catkin_LIBRARIES} libcurses.so)
 target_link_libraries(joint_player ${catkin_LIBRARIES} )
+target_link_libraries(trajectory_player ${catkin_LIBRARIES})
 #############
 ## Install ##
 #############
