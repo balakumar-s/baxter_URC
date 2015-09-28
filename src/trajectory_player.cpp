@@ -17,10 +17,41 @@ int reached_state=0;
 int timestep=5;
 double current_time=0;
 double old_time=0;
+int first_state=0;
+void jointCallback(sensor_msgs::JointState js_)
+{
+	if(first_state==0)
+	{
+		int start=2;
+		if(limb_chosen==0)
+		{
+			start=2;
+		}
+		else
+		{
+			start=9;
+		}
+		int reached_count=0;
+		for(int i=0;i<array_size;i++)
+		{
+			//cout<<fabs(js_.position[start+i]-j_command.command[i]);
+			if(fabs(js_.position[start+i]-j_command.command[i])<MAX_ERR)
+			{
+				reached_count++;
+			}
+		}
+		if (reached_count==array_size)
+		{
+			reached_state=1;
+			first_state=1;
+		}
+	}
+}
+
 void jointCommand()
 {
 	current_time=ros::Time::now().toSec();
-	if ((current_time-old_time)>timestep)
+	if ((current_time-old_time)>timestep&&first_state==1)
 	{
 		ROS_INFO("time step reached");
 		old_time=current_time;
@@ -33,9 +64,10 @@ void jointCommand()
 }
 void readData()
 {
+	ROS_INFO("entering readData");
 	if(!input_file.eof())
 	{
-				
+		ROS_INFO("reading data");
 		j_command.command.resize(array_size);
 		for(int i=0;i<array_size;i++)
 		{
@@ -70,8 +102,9 @@ int main(int argc,char* argv[])
 	ros::init(argc,argv,"Trajectory_player");
 	ros::NodeHandle n;
 	ros::Rate loop_rate(30);
+	ros::Subscriber joint_sub=n.subscribe("/robot/joint_states",1,jointCallback);
 	jCommand_pub=n.advertise<baxter_core_msgs::JointCommand>("/robot/limb/left/joint_command",1);
-	
+ 	
 
 	input_file.open(filename.c_str());
 	string temp;
@@ -81,7 +114,7 @@ int main(int argc,char* argv[])
 	getline(input_file,temp);
 	temp.erase(std::remove(temp.begin(), temp.end(), '\n'), temp.end());
 	timestep=atof(temp.c_str());
-	cerr<<"time: "<<timestep<<" "<<endl;
+	cerr<<"time: "<<timestep<<" count:"<<array_size<<endl;
 	cout<<"Going through waypoints"<<endl;
 	readData();
 	old_time=ros::Time::now().toSec();

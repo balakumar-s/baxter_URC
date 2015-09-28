@@ -5,7 +5,7 @@
 #include <sensor_msgs/JointState.h>
 #include <fstream>
 #include <baxter_core_msgs/JointCommand.h>
-#define MAX_ERR 0.02
+#define MAX_ERR 0.05
 using namespace std;
 std::ifstream input_file;
 int limb_chosen=0;//left=0,right=1.
